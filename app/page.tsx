@@ -1,4 +1,4 @@
-import { GlassCard } from '@/components'
+import { GlassCard, WaitlistForm } from '@/components'
 
 export default function Home() {
   return (
@@ -13,12 +13,9 @@ export default function Home() {
             Upload a photo and see how clothes fit your body — realistically.
           </p>
           <div className="mt-8">
-            <button
-              type="button"
-              className="min-h-[44px] rounded-full bg-white px-6 py-3 font-medium text-black transition-opacity active:opacity-80"
-            >
-              Join Early Access
-            </button>
+            <div className="mx-auto max-w-md">
+              <WaitlistForm />
+            </div>
             <p className="mt-3 text-sm text-[var(--color-muted)]">
               Limited rollout while we refine fit accuracy.
             </p>
@@ -30,10 +27,20 @@ export default function Home() {
       <section id="early-fit-preview" className="px-4 py-12 md:py-16">
         <div className="mx-auto max-w-4xl">
           <GlassCard>
-            <h2 className="text-xl font-medium md:text-2xl">Early Fit Preview</h2>
-            <p className="mt-2 text-[var(--color-muted)]">
-              Visual preview area for fit demonstration.
-            </p>
+            <div className="flex flex-col gap-6 md:flex-row md:items-center md:gap-8">
+              <div className="flex-1">
+                <h2 className="text-xl font-medium md:text-2xl">See It Before You Buy It</h2>
+                <p className="mt-3 text-[var(--color-muted)]">
+                  Upload a photo of yourself, pick a garment, and Fytlo shows you how it drapes on your body. Not a flat overlay — actual fit visualization that accounts for your shape.
+                </p>
+                <p className="mt-3 text-[var(--color-muted)]">
+                  We&apos;re still refining accuracy, but early testers are already using it to avoid returns and find clothes that work.
+                </p>
+              </div>
+              <div className="flex aspect-[4/5] w-full items-center justify-center rounded-lg border border-dashed border-[var(--glass-border)] bg-[var(--color-surface)] md:w-48">
+                <span className="text-sm text-[var(--color-muted)]">Preview coming soon</span>
+              </div>
+            </div>
           </GlassCard>
         </div>
       </section>
@@ -115,12 +122,9 @@ export default function Home() {
             Ready to see how clothes actually fit?
           </h2>
           <div className="mt-6">
-            <button
-              type="button"
-              className="min-h-[44px] rounded-full bg-white px-6 py-3 font-medium text-black transition-opacity active:opacity-80"
-            >
-              Join Early Access
-            </button>
+            <div className="mx-auto max-w-md">
+              <WaitlistForm />
+            </div>
             <p className="mt-3 text-sm text-[var(--color-muted)]">
               Limited rollout while we refine fit accuracy.
             </p>

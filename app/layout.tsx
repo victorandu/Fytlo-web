@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#050506',
+  themeColor: '#18181b',
   colorScheme: 'dark',
 }
 
@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-dark-gradient bg-grain safe-area-top safe-area-bottom">
+      <body className="bg-dark-gradient safe-area-top safe-area-bottom">
         <div className="relative z-10 min-h-dvh">
           {children}
         </div>
