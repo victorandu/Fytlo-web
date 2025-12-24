@@ -3,7 +3,7 @@ export default function Privacy() {
     <main className="min-h-dvh px-4 py-16 md:py-24">
       <article className="prose-invert mx-auto max-w-2xl">
         <h1 className="text-3xl font-semibold md:text-4xl">Privacy Policy</h1>
-        <p className="mt-2 text-sm text-[var(--color-muted)]">Last updated: December 2024</p>
+        <p className="mt-2 text-sm text-[var(--color-muted)]">Last updated: December 2025</p>
 
         <p className="mt-8 text-[var(--color-muted)]">
           Fytlo is a virtual try-on app. We built it to help you see how clothes fit before you buy them. Here&apos;s how we handle your data.
