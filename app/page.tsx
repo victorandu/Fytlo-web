@@ -4,10 +4,10 @@ export default function Home() {
   return (
     <main className="min-h-dvh">
       {/* 1. Hero */}
-      <section id="hero" className="px-4 pt-20 pb-12 md:pt-28 md:pb-16">
+      <section id="hero" className="px-4 pt-16 pb-12 md:pt-20 md:pb-16">
         <div className="mx-auto max-w-3xl text-center">
           {/* Centered wordmark */}
-          <p className="mb-6 text-xs font-medium tracking-[0.25em] text-[#9a9aa3] uppercase md:mb-8 md:text-sm">
+          <p className="mb-6 text-sm font-medium tracking-[0.24em] text-[#c8c8cf] uppercase md:mb-8 md:text-base">
             Fytlo
           </p>
 
