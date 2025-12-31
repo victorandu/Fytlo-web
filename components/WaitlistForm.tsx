@@ -61,12 +61,12 @@ export function WaitlistForm() {
         onChange={(e) => setEmail(e.target.value)}
         required
         disabled={status === 'submitting'}
-        className="min-h-[44px] flex-1 rounded-full border border-[var(--glass-border)] bg-[var(--color-surface)] px-4 py-3 text-white placeholder:text-[var(--color-muted)] focus:border-white/30 focus:outline-none disabled:opacity-50"
+        className="min-h-[44px] flex-1 rounded-full border border-[var(--glass-border)] bg-[var(--color-surface)] px-4 py-3 text-white placeholder:text-[var(--color-muted)] focus:border-[var(--color-secondary)] focus:outline-none disabled:opacity-50"
       />
       <button
         type="submit"
         disabled={status === 'submitting'}
-        className="min-h-[44px] rounded-full bg-white px-6 py-3 font-medium text-black transition-opacity active:opacity-80 disabled:opacity-50"
+        className="min-h-[44px] rounded-full bg-[var(--color-accent)] px-6 py-3 font-medium text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-accent-hover)] active:opacity-80 disabled:opacity-50"
       >
         {status === 'submitting' ? 'Joining...' : 'Join Early Access'}
       </button>

@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <main className="min-h-dvh">
       {/* 1. Hero */}
-      <section id="hero" className="px-4 pt-16 pb-12 md:pt-24 md:pb-16">
+      <section id="hero" className="px-4 pt-24 pb-12 md:pt-32 md:pb-16">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="text-3xl font-semibold tracking-tight md:text-5xl">
             Fit, Not Filters. Virtual Try-On That Matches You.
