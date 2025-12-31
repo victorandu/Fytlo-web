@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import Link from 'next/link'
 import { Logo } from '@/components'
 import './globals.css'
 
@@ -27,9 +28,13 @@ export default function RootLayout({
             <Logo size={32} />
           </a>
           {/* Centered wordmark - absolutely positioned for true center */}
-          <p className="absolute left-1/2 -translate-x-1/2 text-xl font-light tracking-[0.25em] text-[#d0d0d6] uppercase md:text-2xl">
+          <Link
+            href="/"
+            aria-label="Go to homepage"
+            className="absolute left-1/2 -translate-x-1/2 text-xl font-light tracking-[0.25em] text-[#d0d0d6] uppercase transition-opacity hover:opacity-85 md:text-2xl"
+          >
             Fytlo
-          </p>
+          </Link>
         </div>
         <div className="relative z-10 min-h-dvh pt-16">
           {children}
