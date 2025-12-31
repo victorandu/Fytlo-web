@@ -1,11 +1,19 @@
-import { GlassCard, WaitlistForm } from '@/components'
+import { GlassCard, Logo, WaitlistForm } from '@/components'
 
 export default function Home() {
   return (
     <main className="min-h-dvh">
       {/* 1. Hero */}
-      <section id="hero" className="px-4 pt-24 pb-12 md:pt-32 md:pb-16">
+      <section id="hero" className="px-4 pt-16 pb-12 md:pt-24 md:pb-16">
         <div className="mx-auto max-w-3xl text-center">
+          {/* Brand mark */}
+          <div className="mb-8 flex items-center justify-center gap-2 md:mb-10 md:gap-2.5">
+            <Logo size={26} />
+            <span className="text-xs font-medium tracking-[0.2em] text-[#b8b8bf] uppercase md:text-sm">
+              Fytlo
+            </span>
+          </div>
+
           <h1 className="text-3xl font-semibold tracking-tight md:text-5xl">
             Fit, Not Filters. Virtual Try-On That Matches You.
           </h1>
