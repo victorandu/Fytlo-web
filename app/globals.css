@@ -24,10 +24,33 @@
   --glass-blur: 16px;
 }
 
-/* Base body styles */
+/* Page-level gradient - applied to html for full document coverage */
+html {
+  background:
+    /* Soft indigo glow - top center */
+    radial-gradient(ellipse 120% 60% at 50% 0%, rgba(99, 102, 241, 0.08), transparent 50%),
+    /* Subtle cool accent - upper right */
+    radial-gradient(ellipse 80% 50% at 90% 10%, rgba(129, 140, 248, 0.05), transparent 40%),
+    /* Warm balance - upper left */
+    radial-gradient(ellipse 70% 45% at 10% 15%, rgba(167, 139, 250, 0.04), transparent 35%),
+    /* Multi-stop vertical gradient: graphite → slate → indigo-charcoal */
+    linear-gradient(
+      180deg,
+      #1E1F23 0%,
+      #1C1D21 15%,
+      #1A1B20 35%,
+      #191A1F 55%,
+      #18191E 75%,
+      #17181D 100%
+    );
+  background-attachment: fixed;
+  min-height: 100%;
+}
+
+/* Base body styles - transparent to show gradient */
 body {
   color: var(--color-foreground);
-  background: var(--color-base);
+  background: transparent;
   min-height: 100dvh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -45,13 +68,9 @@ body {
   outline: none;
 }
 
-/* Content gradient - premium diffused glows */
+/* Legacy class - kept for compatibility, now transparent */
 .bg-hero-gradient {
-  background:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99, 102, 241, 0.18), transparent),
-    radial-gradient(ellipse 60% 40% at 85% 10%, rgba(236, 72, 153, 0.10), transparent),
-    radial-gradient(ellipse 50% 35% at 15% 5%, rgba(56, 189, 248, 0.06), transparent),
-    #1A1B1F;
+  background: transparent;
 }
 
 /* Glass surface - with fallback for unsupported browsers */
