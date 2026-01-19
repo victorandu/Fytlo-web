@@ -89,7 +89,28 @@ export async function POST(request: Request) {
       )
     }
 
-    console.log(`[waitlist] Email sent successfully, messageId=${result.messageId}`)
+    console.log(`[waitlist] Admin email sent successfully, messageId=${result.messageId}`)
+
+    // Send confirmation email to user
+    try {
+      const userResult = await transporter.sendMail({
+        from: SMTP_FROM || SMTP_USER,
+        to: trimmedEmail,
+        subject: "You're on the Fytlo waitlist",
+        text: `Thanks for joining the Fytlo waitlist.
+
+We're refining fit accuracy and inviting early users in small batches.
+
+You'll hear from us when early access opens.
+
+— Fytlo`,
+      })
+      console.log(`[waitlist] User confirmation email sent successfully, messageId=${userResult.messageId}`)
+    } catch (userEmailError) {
+      console.error('[waitlist] Failed to send user confirmation email:', userEmailError)
+      // Still return success since admin notification was sent
+    }
+
     return NextResponse.json({ ok: true })
   } catch (error) {
     console.error('[waitlist] Request processing error:', error)
