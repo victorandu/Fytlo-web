@@ -85,6 +85,22 @@ Footer on all pages must link to `/privacy` and `/terms`.
 - No new pages beyond `/`, `/privacy`, `/terms` without approval
 - No auth or backend logic
 - Keep dependencies minimal
+- Do not add new dependencies unless explicitly requested; prefer using existing utilities and platform features
+
+## Workflow Requirements
+
+- Prefer minimal, diff-scoped changes over full-file rewrites unless explicitly requested
+
+If requirements are ambiguous, STOP and ask clarifying questions before implementing.
+Do not infer product, UX, or growth intent.
+
+## Testing Expectations
+
+- Run lint after any code changes and include results
+- Add or update unit tests for logic changes
+- Add or update integration or e2e tests when changing routes, forms, or submission flows
+- Update snapshot or visual tests if UI output changes
+- If behavior changes, update docs or copy where relevant
 
 ## Output Requirements
 
