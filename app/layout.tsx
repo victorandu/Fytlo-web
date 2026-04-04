@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: '#0F1C2E',
   colorScheme: 'dark',
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({
@@ -23,7 +24,7 @@ export default function RootLayout({
         <div aria-hidden="true" className="aurora-primary" />
         <div aria-hidden="true" className="aurora-secondary" />
         <Header />
-        <div className="relative z-10 min-h-dvh pt-16">
+        <div className="relative z-10 min-h-dvh pt-[calc(4rem+env(safe-area-inset-top))]">
           {children}
         </div>
       </body>

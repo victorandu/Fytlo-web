@@ -17,7 +17,7 @@ export function Header() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1F2025]/80 backdrop-blur-xl border-b border-white/[0.06] supports-[backdrop-filter]:bg-[#1F2025]/70">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-[env(safe-area-inset-top)]">
         <div className="relative flex items-center justify-between h-16">
 
           {/* Logo */}
