@@ -1,30 +1,76 @@
 import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 
-// Simple email format validation
 function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return emailRegex.test(email)
 }
 
+// Prevent HTML injection in email bodies
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+}
+
+// In-memory rate limiter — 5 requests per IP per minute
+// Resets on cold starts; effective against naive bots on persistent deployments
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT = 5
+const WINDOW_MS = 60_000
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now()
+  const entry = rateLimitMap.get(ip)
+
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + WINDOW_MS })
+    return false
+  }
+
+  if (entry.count >= RATE_LIMIT) return true
+
+  entry.count++
+  return false
+}
+
 export async function POST(request: Request) {
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, WAITLIST_TO_EMAIL, SMTP_FROM } = process.env
 
-  // Debug: Log env vars presence (not values)
-  console.log('[waitlist] Environment check:', {
-    SMTP_HOST: !!SMTP_HOST,
-    SMTP_PORT: !!SMTP_PORT,
-    SMTP_USER: !!SMTP_USER,
-    SMTP_PASS: !!SMTP_PASS,
-    WAITLIST_TO_EMAIL: !!WAITLIST_TO_EMAIL,
-    SMTP_FROM: !!SMTP_FROM,
-  })
+  // Rate limiting
+  const ip =
+    request.headers.get('x-forwarded-for')?.split(',')[0].trim() ??
+    request.headers.get('x-real-ip') ??
+    'unknown'
+
+  if (isRateLimited(ip)) {
+    return NextResponse.json(
+      { ok: false, error: 'Too many requests' },
+      { status: 429 }
+    )
+  }
+
+  // Request size cap (1 KB is more than enough for an email address)
+  const contentLength = request.headers.get('content-length')
+  if (contentLength && parseInt(contentLength, 10) > 1024) {
+    return NextResponse.json(
+      { ok: false, error: 'Request too large' },
+      { status: 413 }
+    )
+  }
 
   try {
     const body = await request.json()
-    const { email } = body
+    const { email, website } = body
 
-    // Validate email presence
+    // Honeypot — bots fill hidden fields, real users don't
+    if (website) {
+      return NextResponse.json({ ok: true })
+    }
+
     if (!email || typeof email !== 'string') {
       return NextResponse.json(
         { ok: false, error: 'Email is required' },
@@ -32,7 +78,6 @@ export async function POST(request: Request) {
       )
     }
 
-    // Validate email format
     const trimmedEmail = email.trim().toLowerCase()
     if (!isValidEmail(trimmedEmail)) {
       return NextResponse.json(
@@ -41,7 +86,6 @@ export async function POST(request: Request) {
       )
     }
 
-    // Check required environment variables
     if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS || !WAITLIST_TO_EMAIL) {
       console.error('[waitlist] Missing required SMTP environment variables')
       return NextResponse.json(
@@ -51,22 +95,15 @@ export async function POST(request: Request) {
     }
 
     const port = parseInt(SMTP_PORT, 10)
-    console.log(`[waitlist] SMTP config: host=${SMTP_HOST}, port=${port}`)
-
-    // Create transporter
     const transporter = nodemailer.createTransport({
       host: SMTP_HOST,
       port,
       secure: port === 465,
-      auth: {
-        user: SMTP_USER,
-        pass: SMTP_PASS,
-      },
+      auth: { user: SMTP_USER, pass: SMTP_PASS },
     })
 
-    // Send email
     const timestamp = new Date().toISOString()
-    console.log(`[waitlist] Sending email for signup: ${trimmedEmail}`)
+    const safeEmail = escapeHtml(trimmedEmail)
 
     let result
     try {
@@ -77,7 +114,7 @@ export async function POST(request: Request) {
         text: `New waitlist signup:\n\nEmail: ${trimmedEmail}\nTimestamp: ${timestamp}`,
         html: `
           <h2>New Fytlo Waitlist Signup</h2>
-          <p><strong>Email:</strong> ${trimmedEmail}</p>
+          <p><strong>Email:</strong> ${safeEmail}</p>
           <p><strong>Timestamp:</strong> ${timestamp}</p>
         `,
       })
@@ -89,9 +126,8 @@ export async function POST(request: Request) {
       )
     }
 
-    console.log(`[waitlist] Admin email sent successfully, messageId=${result.messageId}`)
+    console.log(`[waitlist] Admin email sent, messageId=${result.messageId}`)
 
-    // Send confirmation email to user
     try {
       const userResult = await transporter.sendMail({
         from: SMTP_FROM || SMTP_USER,
@@ -105,10 +141,9 @@ You'll hear from us when early access opens.
 
 — Fytlo`,
       })
-      console.log(`[waitlist] User confirmation email sent successfully, messageId=${userResult.messageId}`)
+      console.log(`[waitlist] User confirmation sent, messageId=${userResult.messageId}`)
     } catch (userEmailError) {
       console.error('[waitlist] Failed to send user confirmation email:', userEmailError)
-      // Still return success since admin notification was sent
     }
 
     return NextResponse.json({ ok: true })

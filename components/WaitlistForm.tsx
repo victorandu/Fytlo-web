@@ -4,17 +4,21 @@ import { useState, type FormEvent } from 'react'
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
-async function submitToWaitlist(email: string): Promise<{ ok: boolean; error?: string }> {
+async function submitToWaitlist(
+  email: string,
+  honeypot: string
+): Promise<{ ok: boolean; error?: string }> {
   const response = await fetch('/api/waitlist', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify({ email, website: honeypot }),
   })
   return response.json()
 }
 
 export function WaitlistForm() {
   const [email, setEmail] = useState('')
+  const [honeypot, setHoneypot] = useState('')
   const [status, setStatus] = useState<FormStatus>('idle')
 
   async function handleSubmit(e: FormEvent) {
@@ -25,7 +29,7 @@ export function WaitlistForm() {
     setStatus('submitting')
 
     try {
-      const result = await submitToWaitlist(email)
+      const result = await submitToWaitlist(email, honeypot)
       if (result.ok) {
         setStatus('success')
         setEmail('')
@@ -50,6 +54,17 @@ export function WaitlistForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row sm:gap-2">
+      {/* Honeypot — hidden from real users, bots fill it in */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        aria-hidden="true"
+        autoComplete="off"
+        style={{ display: 'none' }}
+        value={honeypot}
+        onChange={(e) => setHoneypot(e.target.value)}
+      />
       <label htmlFor="waitlist-email" className="sr-only">
         Email address
       </label>
