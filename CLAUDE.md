@@ -6,17 +6,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Fytlo marketing website + waitlist. This repo handles:
 - Marketing landing page UI
-- Waitlist flow (frontend-only)
+- Waitlist flow (email capture → SMTP delivery via API route)
 - Static policy pages (`/privacy`, `/terms`)
 
-**Not in scope:** VTO/ML models, backend APIs, auth, payments, analytics.
+**Not in scope:** VTO/ML models, auth, payments, analytics.
 
 ## Tech Stack
 
-- Next.js (App Router)
+- Next.js 14 (App Router)
 - TypeScript
 - TailwindCSS
 - pnpm as package manager
+- nodemailer (waitlist SMTP)
 
 ## Commands
 
@@ -27,6 +28,19 @@ pnpm build            # Production build
 pnpm lint             # Run ESLint
 ```
 
+## Local Environment
+
+Copy `.env.example` → `.env.local` and fill in SMTP credentials before running the waitlist form locally:
+
+```
+WAITLIST_TO_EMAIL=   # Where signups are sent
+SMTP_HOST=
+SMTP_PORT=
+SMTP_USER=
+SMTP_PASS=
+SMTP_FROM=           # Optional, defaults to SMTP_USER
+```
+
 ## Architecture
 
 Allowed pages only:
@@ -35,6 +49,10 @@ Allowed pages only:
 - `/terms` — Terms of service
 
 Footer on all pages must link to `/privacy` and `/terms`.
+
+### API Routes
+
+- `POST /api/waitlist` — validates email, sends admin notification + user confirmation via nodemailer. All SMTP config is read from env vars. Structured for easy provider swap (replace transporter in `app/api/waitlist/route.ts`).
 
 ## Landing Page Structure (Fixed Order)
 
@@ -48,8 +66,28 @@ Footer on all pages must link to `/privacy` and `/terms`.
 
 ## Design System: Dark Liquid Glass
 
+### CSS Design Tokens
+
+All colors and glass properties are CSS custom properties defined in `app/globals.css`. Always use these variables — never hardcode hex values:
+
+| Token | Purpose |
+|---|---|
+| `--color-accent` | Primary CTA background |
+| `--color-accent-text` | Text on accent background |
+| `--color-muted` | Secondary/helper text |
+| `--color-surface` | Input/card backgrounds |
+| `--glass-border` | Border on glass surfaces |
+| `--glass-bg` | Glass panel background |
+| `--glass-blur` | Blur amount (16px) |
+
+### GlassCard Component
+
+`<GlassCard variant="default|subtle|strong" as="div|section|article|aside">`
+
+Maps to CSS classes `glass-card`, `glass-card-subtle`, `glass-card-strong` defined in `globals.css`. Use `subtle` for grid items, `default` for feature cards, `strong` for high-emphasis panels.
+
 ### Core Rules
-- Dark gradient background (near-black base)
+- Dark gradient background defined on `html` element in `globals.css` (fixed attachment)
 - Glass panels: `backdrop-filter` with blur/saturation
 - Always provide non-blur fallback for unsupported browsers
 - Gate blur with `@supports (backdrop-filter: blur(1px))`
@@ -60,7 +98,7 @@ Footer on all pages must link to `/privacy` and `/terms`.
 - Mobile-first layout
 - No horizontal scrolling
 - Touch targets ≥ 44px
-- Avoid `100vh` pitfalls (use safe viewport units)
+- Avoid `100vh` pitfalls (use `min-h-dvh`)
 - Must work on phones, tablets, and desktops
 
 ## Copy Constraints
@@ -72,18 +110,12 @@ Footer on all pages must link to `/privacy` and `/terms`.
 
 **Prohibited phrases:** "Perfect fit", "Exact measurements", "Revolutionary", "Future of fashion"
 
-## Waitlist (v1)
-
-- Email input + submit button
-- Client-side success state only (no backend integration yet)
-- Structure code for easy provider swap later
-
 ## Constraints
 
 - No analytics/tracking SDKs
 - No heavy animation or state management libraries
 - No new pages beyond `/`, `/privacy`, `/terms` without approval
-- No auth or backend logic
+- No auth logic
 - Keep dependencies minimal
 - Do not add new dependencies unless explicitly requested; prefer using existing utilities and platform features
 
@@ -94,13 +126,11 @@ Footer on all pages must link to `/privacy` and `/terms`.
 If requirements are ambiguous, STOP and ask clarifying questions before implementing.
 Do not infer product, UX, or growth intent.
 
-## Testing Expectations
+## Testing
 
-- Run lint after any code changes and include results
-- Add or update unit tests for logic changes
-- Add or update integration or e2e tests when changing routes, forms, or submission flows
-- Update snapshot or visual tests if UI output changes
-- If behavior changes, update docs or copy where relevant
+No test framework is currently installed. Until one is added:
+- Run `pnpm lint` after every code change and include results
+- Manually verify form submission and success/error states when touching `WaitlistForm` or `app/api/waitlist/route.ts`
 
 ## Output Requirements
 
