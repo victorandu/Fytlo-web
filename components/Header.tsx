@@ -7,9 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Logo } from "@/components"
 
 const navLinks = [
-  { label: "Home", href: "/#hero" },
   { label: "How it Works", href: "/#how-it-works" },
-  { label: "Waitlist", href: "/#hero" },
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
 ]
@@ -38,7 +36,7 @@ export function Header() {
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-6">
-            {navLinks.slice(0, 3).map((link) => (
+            {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
