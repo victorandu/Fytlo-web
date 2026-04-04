@@ -27,29 +27,112 @@
 /* Page-level gradient - applied to html for full document coverage */
 html {
   background:
-    /* Warm amber glow - mid left (new, refracted by glass) */
-    radial-gradient(ellipse 60% 40% at 5% 50%, rgba(235, 220, 203, 0.04), transparent 50%),
-    /* Violet blob - lower right */
-    radial-gradient(ellipse 70% 50% at 95% 75%, rgba(139, 92, 246, 0.07), transparent 55%),
+    /* Warm amber glow - mid left */
+    radial-gradient(ellipse 60% 40% at 5% 50%, rgba(235, 220, 203, 0.07), transparent 50%),
+    /* Violet bloom - lower right */
+    radial-gradient(ellipse 70% 50% at 95% 75%, rgba(139, 92, 246, 0.16), transparent 55%),
     /* Soft indigo glow - top center */
-    radial-gradient(ellipse 120% 60% at 50% 0%, rgba(99, 102, 241, 0.10), transparent 50%),
+    radial-gradient(ellipse 120% 60% at 50% 0%, rgba(99, 102, 241, 0.18), transparent 50%),
     /* Cool accent - upper right */
-    radial-gradient(ellipse 80% 50% at 90% 10%, rgba(129, 140, 248, 0.06), transparent 40%),
+    radial-gradient(ellipse 80% 50% at 90% 10%, rgba(129, 140, 248, 0.12), transparent 40%),
     /* Warm balance - upper left */
-    radial-gradient(ellipse 70% 45% at 10% 15%, rgba(167, 139, 250, 0.05), transparent 35%),
-    /* Base vertical gradient */
+    radial-gradient(ellipse 70% 45% at 10% 15%, rgba(167, 139, 250, 0.10), transparent 35%),
+    /* Base vertical gradient - darker so color pops */
     linear-gradient(
       180deg,
-      #1E1F23 0%,
-      #1C1D21 15%,
-      #1A1B20 35%,
-      #191A1F 55%,
-      #18191E 75%,
-      #17181D 100%
+      #13141A 0%,
+      #111218 20%,
+      #101117 45%,
+      #0F1016 70%,
+      #0E0F15 100%
     );
   background-attachment: fixed;
   min-height: 100%;
   scroll-behavior: smooth;
+}
+
+/* Aurora sweep layers - fixed behind all content */
+.aurora-primary,
+.aurora-secondary {
+  position: fixed;
+  top: 0;
+  left: -10%;
+  width: 120%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.aurora-primary {
+  height: 70vh;
+  background: linear-gradient(
+    102deg,
+    transparent 0%,
+    rgba(99, 102, 241, 0.16) 18%,
+    rgba(139, 92, 246, 0.26) 36%,
+    rgba(167, 139, 250, 0.20) 50%,
+    rgba(129, 140, 248, 0.24) 66%,
+    rgba(99, 102, 241, 0.14) 82%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  filter: blur(72px);
+  animation: aurora-primary 22s ease-in-out infinite;
+}
+
+.aurora-secondary {
+  height: 50vh;
+  top: 8%;
+  background: linear-gradient(
+    97deg,
+    transparent 0%,
+    rgba(235, 220, 203, 0.07) 12%,
+    rgba(139, 92, 246, 0.14) 32%,
+    rgba(235, 220, 203, 0.09) 52%,
+    rgba(129, 140, 248, 0.17) 72%,
+    rgba(235, 220, 203, 0.05) 88%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  filter: blur(90px);
+  animation: aurora-secondary 32s ease-in-out infinite;
+  opacity: 0.85;
+}
+
+@keyframes aurora-primary {
+  0%, 100% {
+    background-position: 0% 50%;
+    transform: translateX(0) scaleY(1);
+  }
+  38% {
+    background-position: 72% 50%;
+    transform: translateX(3%) scaleY(1.06);
+  }
+  68% {
+    background-position: 100% 50%;
+    transform: translateX(-2%) scaleY(0.96);
+  }
+}
+
+@keyframes aurora-secondary {
+  0%, 100% {
+    background-position: 100% 50%;
+    transform: translateX(0) scaleY(1);
+  }
+  45% {
+    background-position: 15% 50%;
+    transform: translateX(-3%) scaleY(1.04);
+  }
+  75% {
+    background-position: 0% 50%;
+    transform: translateX(2%) scaleY(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-primary,
+  .aurora-secondary {
+    animation: none;
+  }
 }
 
 /* Base body styles - transparent to show gradient */
