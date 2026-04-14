@@ -1,114 +1,33 @@
-'use client';
+'use client'
 
-import { useEffect } from 'react';
-import { WaitlistForm } from '@/components';
+import dynamic from 'next/dynamic'
+import { WaitlistForm } from '@/components'
 
-// TODO: Replace data-us-project value with your own UnicornStudio project ID.
-// The current ID (whwOGlfJ5Rz2rHaEUgHl) is a demo project from 21st.dev.
-// Create your own at https://unicorn.studio and swap the ID below.
+// Three.js scene — loaded client-side only (no SSR)
+const BodyMesh = dynamic(() => import('./body-mesh'), { ssr: false })
 
 export default function HeroAscii() {
-  useEffect(() => {
-    const embedScript = document.createElement('script');
-    embedScript.type = 'text/javascript';
-    embedScript.textContent = `
-      !function(){
-        if(!window.UnicornStudio){
-          window.UnicornStudio={isInitialized:!1};
-          var i=document.createElement("script");
-          i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.33/dist/unicornStudio.umd.js";
-          i.onload=function(){
-            window.UnicornStudio.isInitialized||(UnicornStudio.init(),window.UnicornStudio.isInitialized=!0)
-          };
-          (document.head || document.body).appendChild(i)
-        }
-      }();
-    `;
-    document.head.appendChild(embedScript);
-
-    const style = document.createElement('style');
-    style.textContent = `
-      [data-us-project] {
-        position: relative !important;
-        overflow: hidden !important;
-      }
-      [data-us-project] canvas {
-        clip-path: inset(0 0 10% 0) !important;
-      }
-      [data-us-project] * {
-        pointer-events: none !important;
-      }
-      [data-us-project] a[href*="unicorn"],
-      [data-us-project] button[title*="unicorn"],
-      [data-us-project] div[title*="Made with"],
-      [data-us-project] .unicorn-brand,
-      [data-us-project] [class*="brand"],
-      [data-us-project] [class*="credit"],
-      [data-us-project] [class*="watermark"] {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        position: absolute !important;
-        left: -9999px !important;
-        top: -9999px !important;
-      }
-    `;
-    document.head.appendChild(style);
-
-    const hideBranding = () => {
-      const projectDiv = document.querySelector('[data-us-project]');
-      if (projectDiv) {
-        projectDiv.querySelectorAll('*').forEach(el => {
-          const text = (el.textContent || '').toLowerCase();
-          if (text.includes('made with') || text.includes('unicorn')) {
-            (el as HTMLElement).remove();
-          }
-        });
-      }
-    };
-
-    hideBranding();
-    const interval = setInterval(hideBranding, 100);
-    setTimeout(hideBranding, 1000);
-    setTimeout(hideBranding, 3000);
-    setTimeout(hideBranding, 5000);
-
-    return () => {
-      clearInterval(interval);
-      if (document.head.contains(embedScript)) document.head.removeChild(embedScript);
-      if (document.head.contains(style)) document.head.removeChild(style);
-    };
-  }, []);
-
   return (
     <section
       id="hero"
-      className="relative overflow-hidden"
+      className="relative overflow-hidden flex flex-col lg:flex-row"
       style={{ minHeight: 'calc(100dvh - 4rem)' }}
     >
-      {/* UnicornStudio animation — desktop only */}
-      <div className="absolute inset-0 w-full h-full hidden lg:block">
-        <div
-          data-us-project="whwOGlfJ5Rz2rHaEUgHl"
-          style={{ width: '100%', height: '100%', minHeight: '100%' }}
-        />
-      </div>
-
-      {/* Mobile stars background */}
-      <div className="absolute inset-0 w-full h-full lg:hidden stars-bg" />
+      {/* Mobile: stars background (Three.js not loaded on mobile) */}
+      <div className="absolute inset-0 lg:hidden stars-bg" />
 
       {/* Corner frame accents */}
-      <div className="absolute top-0 left-0 w-8 h-8 lg:w-12 lg:h-12 border-t-2 border-l-2 border-white/30 z-20" />
-      <div className="absolute top-0 right-0 w-8 h-8 lg:w-12 lg:h-12 border-t-2 border-r-2 border-white/30 z-20" />
-      <div className="absolute left-0 w-8 h-8 lg:w-12 lg:h-12 border-b-2 border-l-2 border-white/30 z-20" style={{ bottom: '5vh' }} />
-      <div className="absolute right-0 w-8 h-8 lg:w-12 lg:h-12 border-b-2 border-r-2 border-white/30 z-20" style={{ bottom: '5vh' }} />
+      <div className="absolute top-0 left-0 w-8 h-8 lg:w-12 lg:h-12 border-t-2 border-l-2 border-white/30 z-20 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-8 h-8 lg:w-12 lg:h-12 border-t-2 border-r-2 border-white/30 z-20 pointer-events-none" />
+      <div className="absolute left-0 w-8 h-8 lg:w-12 lg:h-12 border-b-2 border-l-2 border-white/30 z-20 pointer-events-none" style={{ bottom: '5vh' }} />
+      <div className="absolute right-0 w-8 h-8 lg:w-12 lg:h-12 border-b-2 border-r-2 border-white/30 z-20 pointer-events-none" style={{ bottom: '5vh' }} />
 
-      {/* Content */}
+      {/* ── Left: hero content ──────────────────────────────────────────────── */}
       <div
-        className="relative z-10 flex items-center px-6 py-16 lg:px-16 lg:py-0 lg:ml-[10%]"
+        className="relative z-10 flex items-center w-full lg:w-[46%] px-6 py-16 lg:px-0 lg:py-0 lg:pl-[8%]"
         style={{ minHeight: 'calc(100dvh - 4rem)' }}
       >
-        <div className="max-w-lg">
+        <div className="max-w-md w-full">
           {/* Top decorative line */}
           <div className="flex items-center gap-2 mb-3 opacity-60">
             <div className="w-8 h-px bg-white" />
@@ -130,15 +49,15 @@ export default function HeroAscii() {
             </h1>
           </div>
 
-          {/* Decorative dots — desktop only */}
+          {/* Decorative dot row — desktop only */}
           <div className="hidden lg:flex gap-1 mb-3 opacity-40">
-            {Array.from({ length: 40 }).map((_, i) => (
+            {Array.from({ length: 32 }).map((_, i) => (
               <div key={i} className="w-0.5 h-0.5 bg-white rounded-full" />
             ))}
           </div>
 
           {/* Subheadline */}
-          <p className="text-xs lg:text-base text-gray-300 mb-6 leading-relaxed font-mono opacity-80">
+          <p className="text-xs lg:text-sm text-gray-300 mb-6 leading-relaxed font-mono opacity-80">
             Upload a photo and see how clothes fit your body — realistically.
           </p>
 
@@ -158,6 +77,11 @@ export default function HeroAscii() {
           </div>
         </div>
       </div>
+
+      {/* ── Right: 3D body mesh — desktop only ─────────────────────────────── */}
+      <div className="hidden lg:block lg:flex-1 relative">
+        <BodyMesh className="absolute inset-0 w-full h-full" />
+      </div>
     </section>
-  );
+  )
 }
