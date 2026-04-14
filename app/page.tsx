@@ -1,34 +1,12 @@
 import { GlassCard, WaitlistForm } from '@/components'
+import HeroAscii from '@/components/ui/hero-ascii'
 
 export default function Home() {
   return (
     <main className="min-h-dvh">
 
       {/* 1. Hero */}
-      <section id="hero" className="px-4 pt-12 pb-16 md:pt-16 md:pb-24">
-        <div className="mx-auto max-w-3xl text-center">
-          {/* Badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--glass-border)] bg-[var(--glass-bg)] px-4 py-1.5 text-xs tracking-wide text-[var(--color-muted)] backdrop-blur-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
-            Early Access · Invite Only
-          </div>
-
-          <h1 className="text-3xl font-semibold tracking-tight leading-tight md:text-5xl">
-            Fit, Not Filters. Virtual Try-On That Matches You.
-          </h1>
-          <p className="mt-4 text-lg text-[var(--color-muted)] md:text-xl">
-            Upload a photo and see how clothes fit your body — realistically.
-          </p>
-
-          {/* Liquid glass form panel */}
-          <div className="mt-8 liquid-glass mx-auto max-w-lg">
-            <WaitlistForm />
-            <p className="mt-3 text-sm text-[var(--color-muted)]">
-              Limited rollout while we refine fit accuracy.
-            </p>
-          </div>
-        </div>
-      </section>
+      <HeroAscii />
 
       {/* 2. Early Fit Preview */}
       <section id="early-fit-preview" className="px-4 py-12 md:py-16">
