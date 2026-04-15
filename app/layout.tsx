@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { Analytics } from '@vercel/analytics/next'
 import { Header } from '@/components'
 import './globals.css'
 
@@ -27,6 +28,7 @@ export default function RootLayout({
         <div className="relative z-10 min-h-dvh pt-[calc(4rem+env(safe-area-inset-top))]">
           {children}
         </div>
+        <Analytics />
       </body>
     </html>
   )
