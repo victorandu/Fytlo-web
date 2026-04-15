@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Header } from '@/components'
+import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -27,6 +29,8 @@ export default function RootLayout({
         <div className="relative z-10 min-h-dvh pt-[calc(4rem+env(safe-area-inset-top))]">
           {children}
         </div>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
