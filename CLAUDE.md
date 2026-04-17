@@ -115,7 +115,7 @@ Maps to CSS classes `glass-card`, `glass-card-subtle`, `glass-card-strong` defin
 
 ## Constraints
 
-- No analytics/tracking SDKs
+- No third-party analytics/tracking SDKs — Vercel Analytics + Speed Insights are approved
 - No heavy animation or state management libraries
 - No new pages beyond `/`, `/privacy`, `/terms` without approval
 - No auth logic
